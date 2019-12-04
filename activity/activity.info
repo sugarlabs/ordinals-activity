@@ -1,8 +1,8 @@
 [Activity]
-name = TwentyFourtyEight
+name = Ordinals
 activity_version = 6
-bundle_id = org.sugarlabs.TwentyFourtyEight
-exec = sugar-activity3 activity.TwentyFourtyEightActivity
+bundle_id = org.sugarlabs.Ordinals
+exec = sugar-activity3 activity.OrdinalsActivity
 icon = activity-helloworld
 license = GPLv2+
-repository = https://github.com/pidddgy/2048-activity
+repository = https://github.com/pidddgy/ordinals-activity

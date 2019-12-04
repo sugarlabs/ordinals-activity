@@ -19,7 +19,7 @@ import sugargame.canvas
 import game
 
 
-class TwentyFourtyEightActivity(Activity):
+class OrdinalsActivity(Activity):
 
     def __init__(self, handle):
         Activity.__init__(self, handle)
