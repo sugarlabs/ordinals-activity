@@ -1,8 +1,8 @@
 [Activity]
-name = HelloWorld
+name = TwentyFourtyEight
 activity_version = 6
-bundle_id = org.sugarlabs.HelloWorld
-exec = sugar-activity3 activity.HelloWorldActivity
+bundle_id = org.sugarlabs.TwentyFourtyEight
+exec = sugar-activity3 activity.TwentyFourtyEightActivity
 icon = activity-helloworld
 license = GPLv2+
-repository = https://github.com/sugarlabs/hello-world-fork.git
+repository = https://github.com/pidddgy/2048-activity

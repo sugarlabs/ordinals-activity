@@ -31,7 +31,7 @@ from sugar3.activity.widgets import ShareButton
 from sugar3.activity.widgets import DescriptionItem
 
 
-class HelloWorldActivity(activity.Activity):
+class TwentyFourtyEightActivity(activity.Activity):
     """HelloWorldActivity class as specified in activity.info"""
 
     def __init__(self, handle):
