@@ -30,6 +30,9 @@ from sugar3.activity.widgets import StopButton
 from sugar3.activity.widgets import ShareButton
 from sugar3.activity.widgets import DescriptionItem
 
+import pygame
+import game
+
 
 class TwentyFourtyEightActivity(activity.Activity):
     """HelloWorldActivity class as specified in activity.info"""
