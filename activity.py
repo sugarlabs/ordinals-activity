@@ -32,6 +32,7 @@ from sugar3.activity.widgets import DescriptionItem
 
 import pygame
 import game
+import sugargame.canvas
 
 
 class TwentyFourtyEightActivity(activity.Activity):
