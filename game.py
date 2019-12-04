@@ -3,13 +3,15 @@ import pygame
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
+from deck import Deck
+from hand import Hand
 
 class Game:
 
     def __init__(self):
         # Set up a clock for managing the frame rate.
         self.clock = pygame.time.Clock()
+        self.deck = Deck()
 
     # Called to save the state of the game to the Journal.
     def write_file(self, file_path):
