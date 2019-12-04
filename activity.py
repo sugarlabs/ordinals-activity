@@ -24,8 +24,6 @@ class TwentyFourtyEightActivity(Activity):
     def __init__(self, handle):
         Activity.__init__(self, handle)
 
-        self.paused = False
-
         # Create the game instance.
         self.game = game.Game()
 
@@ -52,15 +50,6 @@ class TwentyFourtyEightActivity(Activity):
         toolbar_box.toolbar.insert(activity_button, -1)
         activity_button.show()
 
-        # Pause/Play button:
-
-        pause_play = ToolButton('media-playback-pause')
-        pause_play.set_tooltip(_("Pause"))
-        pause_play.set_accelerator(_('<ctrl>space'))
-        pause_play.connect('clicked', self._pause_play_cb)
-        pause_play.show()
-
-        toolbar_box.toolbar.insert(pause_play, -1)
 
         # Blank space (separator) and Stop button at the end:
 
@@ -74,19 +63,6 @@ class TwentyFourtyEightActivity(Activity):
         toolbar_box.toolbar.insert(stop_button, -1)
         stop_button.show()
         stop_button.connect('clicked', self._stop_cb)
-
-    def _pause_play_cb(self, button):
-        # Pause or unpause the game.
-        self.paused = not self.paused
-        self.game.set_paused(self.paused)
-
-        # Update the button to show the next action.
-        if self.paused:
-            button.set_icon_name('media-playback-start')
-            button.set_tooltip(_("Start"))
-        else:
-            button.set_icon_name('media-playback-pause')
-            button.set_tooltip(_("Pause"))
 
     def _stop_cb(self, button):
         self.game.running = False
