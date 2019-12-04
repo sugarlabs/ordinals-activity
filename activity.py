@@ -1,69 +1,68 @@
-# Copyright 2009 Simon Schampijer
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+from gettext import gettext as _
 
-"""HelloWorld Activity: A case study for developing an activity."""
-
+import sys
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
-from gettext import gettext as _
-
-from sugar3.activity import activity
-from sugar3.graphics.toolbarbox import ToolbarBox
-from sugar3.activity.widgets import ActivityButton
-from sugar3.activity.widgets import TitleEntry
-from sugar3.activity.widgets import StopButton
-from sugar3.activity.widgets import ShareButton
-from sugar3.activity.widgets import DescriptionItem
-
 import pygame
-import game
+
+from sugar3.activity.activity import Activity
+from sugar3.graphics.toolbarbox import ToolbarBox
+from sugar3.activity.widgets import ActivityToolbarButton
+from sugar3.graphics.toolbutton import ToolButton
+from sugar3.activity.widgets import StopButton
+
+
+sys.path.append('..')  # Import sugargame package from top directory.
 import sugargame.canvas
 
+import game
 
-class TwentyFourtyEightActivity(activity.Activity):
-    """HelloWorldActivity class as specified in activity.info"""
+
+class TwentyFourtyEightActivity(Activity):
 
     def __init__(self, handle):
-        """Set up the HelloWorld activity."""
-        activity.Activity.__init__(self, handle)
+        Activity.__init__(self, handle)
 
-        # we do not have collaboration features
-        # make the share option insensitive
-        self.max_participants = 1
+        self.paused = False
 
-        # toolbar with the new toolbar redesign
+        # Create the game instance.
+        self.game = game.Game()
+
+        # Build the activity toolbar.
+        self.build_toolbar()
+
+        # Build the Pygame canvas and start the game running
+        # (self.game.run is called when the activity constructor
+        # returns).
+        self._pygamecanvas = sugargame.canvas.PygameCanvas(
+            self, main=self.game.run, modules=[pygame.display])
+
+        # Note that set_canvas implicitly calls read_file when
+        # resuming from the Journal.
+        self.set_canvas(self._pygamecanvas)
+        self._pygamecanvas.grab_focus()
+
+    def build_toolbar(self):
         toolbar_box = ToolbarBox()
+        self.set_toolbar_box(toolbar_box)
+        toolbar_box.show()
 
-        activity_button = ActivityButton(self)
-        toolbar_box.toolbar.insert(activity_button, 0)
+        activity_button = ActivityToolbarButton(self)
+        toolbar_box.toolbar.insert(activity_button, -1)
         activity_button.show()
 
-        title_entry = TitleEntry(self)
-        toolbar_box.toolbar.insert(title_entry, -1)
-        title_entry.show()
+        # Pause/Play button:
 
-        description_item = DescriptionItem(self)
-        toolbar_box.toolbar.insert(description_item, -1)
-        description_item.show()
+        pause_play = ToolButton('media-playback-pause')
+        pause_play.set_tooltip(_("Pause"))
+        pause_play.set_accelerator(_('<ctrl>space'))
+        pause_play.connect('clicked', self._pause_play_cb)
+        pause_play.show()
 
-        share_button = ShareButton(self)
-        toolbar_box.toolbar.insert(share_button, -1)
-        share_button.show()
+        toolbar_box.toolbar.insert(pause_play, -1)
+
+        # Blank space (separator) and Stop button at the end:
 
         separator = Gtk.SeparatorToolItem()
         separator.props.draw = False
@@ -74,11 +73,29 @@ class TwentyFourtyEightActivity(activity.Activity):
         stop_button = StopButton(self)
         toolbar_box.toolbar.insert(stop_button, -1)
         stop_button.show()
+        stop_button.connect('clicked', self._stop_cb)
 
-        self.set_toolbar_box(toolbar_box)
-        toolbar_box.show()
+    def _pause_play_cb(self, button):
+        # Pause or unpause the game.
+        self.paused = not self.paused
+        self.game.set_paused(self.paused)
 
-        # label with the text, make the string translatable
-        label = Gtk.Label(_("Hello World!"))
-        self.set_canvas(label)
-        label.show()
+        # Update the button to show the next action.
+        if self.paused:
+            button.set_icon_name('media-playback-start')
+            button.set_tooltip(_("Start"))
+        else:
+            button.set_icon_name('media-playback-pause')
+            button.set_tooltip(_("Pause"))
+
+    def _stop_cb(self, button):
+        self.game.running = False
+
+    def read_file(self, file_path):
+        self.game.read_file(file_path)
+
+    def write_file(self, file_path):
+        self.game.write_file(file_path)
+
+    def get_preview(self):
+        return self._pygamecanvas.get_preview()
