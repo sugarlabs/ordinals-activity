@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import pygame
 import gi
+import math
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from deck import Deck
@@ -11,7 +12,11 @@ class Game:
     def __init__(self):
         # Set up a clock for managing the frame rate.
         self.clock = pygame.time.Clock()
+
         self.deck = Deck()
+        self.playerHand = Hand()
+        self.robotHand = Hand()
+        self.deck.deal([self.playerHand, self.robotHand])
 
     # Called to save the state of the game to the Journal.
     def write_file(self, file_path):
@@ -35,6 +40,8 @@ class Game:
         pygame.display.update(dirty)
 
         while self.running:
+            width, height = pygame.display.get_surface().get_size()
+
             dirty = []
 
             # Pump GTK messages.
@@ -51,6 +58,16 @@ class Game:
                     pygame.display.set_mode(event.size, pygame.RESIZABLE)
                     width = screen.get_width()
                     height = screen.get_height()
+
+            # Each row of cards is 33% of game height
+            
+            textRect = pygame.Rect(0, 0, width, height//3)
+            playerRect = pygame.Rect(0, textRect.bottom, width, height//3)
+            # testRect = pygame.Rect(0, 0, 50, 50)
+
+            dirty.append(textRect)
+            dirty.append(pygame.draw.rect(screen, (100, 0, 0), playerRect))
+            # dirty.append(testRect)
 
             # Update Display
             pygame.display.update(dirty)
