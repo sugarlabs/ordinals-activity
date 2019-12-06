@@ -1,4 +1,5 @@
 # Taken from https://github.com/walterbender/ordinals.activity
+from random import randrange
 
 class Deck:
     deck = []

@@ -5,6 +5,8 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from deck import Deck
 from hand import Hand
+from card import Card
+from colors import Colors
 
 class Game:
 
@@ -29,13 +31,8 @@ class Game:
         width = screen.get_width()
         height = screen.get_height()
 
-        dirty = []
-        dirty.append(pygame.draw.rect(screen, (255, 255, 255),
-                                      pygame.Rect(0, 0, width, height)))
-        pygame.display.update(dirty)
-
         while self.running:
-            dirty = []
+            width, height = pygame.display.get_surface().get_size()
 
             # Pump GTK messages.
             while Gtk.events_pending():
@@ -52,11 +49,13 @@ class Game:
                     width = screen.get_width()
                     height = screen.get_height()
 
-            # Update Display
-            pygame.display.update(dirty)
+            screen.fill(Colors["LIGHT_GREY"])
+            test = Card(Colors["DARK_GREY"], 200, 200, 80, "1")
+            test.draw(screen)
 
             # Try to stay at 30 FPS
             self.clock.tick(30)
+            pygame.display.flip();
 
 
 # This function is called when the game is run directly from the command line:
