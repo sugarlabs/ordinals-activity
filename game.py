@@ -14,6 +14,9 @@ class Game:
         # Set up a clock for managing the frame rate.
         self.clock = pygame.time.Clock()
         self.deck = Deck()
+        
+        # How many cards in our line
+        self.cardsLength = 5
 
     # Called to save the state of the game to the Journal.
     def write_file(self, file_path):
@@ -41,10 +44,11 @@ class Game:
             mousePos = pygame.mouse.get_pos()
             
             dirty = []
-            screen.fill(Colors["LIGHT_GREY"])
-            test = Card(Colors["DARK_GREY"], 200, 200, 80, "1")
-            test.draw(screen)
-            dirty.append(test.getRect())
+            buffer = height//10
+            for i in range(1, self.cardsLength+1, 1):
+                test = Card(Colors["DARK_GREY"], width//self.cardsLength//2, height//100 + height//self.cardsLength*(i-1), int((height//self.cardsLength) * 0.9), "1")
+                test.draw(screen)
+                dirty.append(test.getRect())
 
             # Pump GTK messages.
             while Gtk.events_pending():
@@ -63,10 +67,7 @@ class Game:
                     width = screen.get_width()
                     height = screen.get_height()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if(test.isOver(mousePos)):
-                        test.color = Colors["LIGHT_GREY"]
-                        test.draw(screen)
-                        dirty.append(test.getRect())
+                    pass  
 
             # Try to stay at 30 FPS
             self.clock.tick(30)
