@@ -38,6 +38,13 @@ class Game:
 
         while self.running:
             width, height = pygame.display.get_surface().get_size()
+            mousePos = pygame.mouse.get_pos()
+            
+            dirty = []
+            screen.fill(Colors["LIGHT_GREY"])
+            test = Card(Colors["DARK_GREY"], 200, 200, 80, "1")
+            test.draw(screen)
+            dirty.append(test.getRect())
 
             # Pump GTK messages.
             while Gtk.events_pending():
@@ -55,11 +62,11 @@ class Game:
                     pygame.display.set_mode(event.size, pygame.RESIZABLE)
                     width = screen.get_width()
                     height = screen.get_height()
-
-            screen.fill(Colors["LIGHT_GREY"])
-            test = Card(Colors["DARK_GREY"], 200, 200, 80, "1")
-            test.draw(screen)
-            dirty.append(test.getRect())
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if(test.isOver(mousePos)):
+                        test.color = Colors["LIGHT_GREY"]
+                        test.draw(screen)
+                        dirty.append(test.getRect())
 
             # Try to stay at 30 FPS
             self.clock.tick(30)
