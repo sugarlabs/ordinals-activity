@@ -31,6 +31,11 @@ class Game:
         width = screen.get_width()
         height = screen.get_height()
 
+        dirty = []
+        dirty.append(pygame.draw.rect(screen, Colors["LIGHT_GREY"],
+                                      pygame.Rect(0, 0, width, height)))
+        pygame.display.update(dirty)
+
         while self.running:
             width, height = pygame.display.get_surface().get_size()
 
@@ -45,6 +50,8 @@ class Game:
                 if event.type == pygame.QUIT:
                     return
                 elif event.type == pygame.VIDEORESIZE:
+                    dirty.append(pygame.draw.rect(screen, Colors["LIGHT_GREY"],
+                                      pygame.Rect(0, 0, width, height)))
                     pygame.display.set_mode(event.size, pygame.RESIZABLE)
                     width = screen.get_width()
                     height = screen.get_height()
@@ -52,10 +59,11 @@ class Game:
             screen.fill(Colors["LIGHT_GREY"])
             test = Card(Colors["DARK_GREY"], 200, 200, 80, "1")
             test.draw(screen)
+            dirty.append(test.getRect())
 
             # Try to stay at 30 FPS
             self.clock.tick(30)
-            pygame.display.flip();
+            pygame.display.update(dirty)
 
 
 # This function is called when the game is run directly from the command line:
