@@ -42,10 +42,11 @@ class Game:
         pygame.display.update()
 
         drawn = self.deck.draw()
-        msg = 'You drew ' + str(drawn)
+        msg = "You drew " + str(drawn) + " from the deck."
         waitingForClick = True
         robotTurn = False
         timeStartedRobotTurn = None
+        waitingForDiscardChoice = False
         robotDrew = False
         playerDrew = False
         while self.running:
@@ -67,10 +68,12 @@ class Game:
                 else:
                     if not playerDrew:
                         drawn = self.deck.draw()
-                        msg = "You drew "+str(drawn)
+                        msg = "You drew "+str(drawn)+ " from the deck. Use?"
                         waitingForClick = True
                         playerDrew = True
                         robotTurn = False
+                        waitingForDiscardChoice = True
+                        
             font = pygame.font.SysFont('arial', width//20)
             text = font.render(msg, 1, (0,0,0))
             textX = (width//self.cardsLength//2) + width//10
@@ -81,6 +84,18 @@ class Game:
             pygame.draw.rect(screen, Colors["LIGHT_GREY"], (textX, textY, width, bottomRightY))
             screen.blit(text, ((textX, textY)))
             dirty.append((textX, textY, width, bottomRightY))
+
+            yesButton = None
+            noButton = None
+            if waitingForDiscardChoice:
+                yesButton = Card(Colors["GREEN"], textX, bottomRightY + textY, width//5, "Yes")
+                yesButton.draw(screen)
+                noButton = Card(Colors["RED"], textX + abs(bottomRightX-textX)//4*2, bottomRightY + textY, width//5, "No")
+                noButton.draw(screen)
+
+            if waitingForDiscardChoice:
+                dirty.append(yesButton.getRect())
+                dirty.append(noButton.getRect())
 
             # Pump GTK messages.
             while Gtk.events_pending():
@@ -108,6 +123,13 @@ class Game:
                                 playerDrew = False
                                 waitingForClick = False
                                 timeStartedRobotTurn = pygame.time.get_ticks()
+                    
+                    if(waitingForDiscardChoice):
+                        print("mouse down while waiting for discard choice")
+                        if(yesButton.isOver(mousePos)):
+                            print("clicked yes")
+                        elif noButton.isOver(mousePos):
+                            print("clicked no button")
 
 
 
