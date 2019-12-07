@@ -43,6 +43,7 @@ class Game:
 
         while self.running:
             width, height = pygame.display.get_surface().get_size()
+            mousePos = pygame.mouse.get_pos()
 
             dirty = []
             for i in range(self.cardsLength):
@@ -65,7 +66,11 @@ class Game:
                     screen.fill(Colors["LIGHT_GREY"])
                     pygame.display.update()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    pass
+                    for i in range(self.cardsLength):
+                        card = Card(Colors["DARK_GREY"], width//self.cardsLength//2, 
+                (height//100) + (height//self.cardsLength)*i, int((height//self.cardsLength) * 0.9), str(self.playerHand.hand[i]))
+                        if(card.isOver(mousePos)):
+                            print("clicked on card "+str(i))
 
             # Try to stay at 30 FPS
             self.clock.tick(30)
