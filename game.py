@@ -68,6 +68,7 @@ class Game:
                     if not playerDrew:
                         drawn = self.deck.draw()
                         msg = "You drew "+str(drawn)
+                        waitingForClick = True
                         playerDrew = True
                         robotTurn = False
             font = pygame.font.SysFont('arial', width//20)
@@ -105,6 +106,7 @@ class Game:
                                 robotTurn = True
                                 robotDrew = False
                                 playerDrew = False
+                                waitingForClick = False
                                 timeStartedRobotTurn = pygame.time.get_ticks()
 
 
