@@ -44,6 +44,10 @@ class Game:
         drawn = self.deck.draw()
         msg = 'You drew ' + str(drawn)
         waitingForClick = True
+        robotTurn = False
+        timeStartedRobotTurn = None
+        robotDrew = False
+        playerDrew = False
         while self.running:
             width, height = pygame.display.get_surface().get_size()
             mousePos = pygame.mouse.get_pos()
@@ -54,7 +58,18 @@ class Game:
                 (height//100) + (height//self.cardsLength)*i, int((height//self.cardsLength) * 0.9), str(self.playerHand.hand[i]))
                 test.draw(screen)
                 dirty.append(test.getRect())
-
+            if robotTurn:
+                if(pygame.time.get_ticks() - timeStartedRobotTurn < 2000):
+                    if not robotDrew:
+                        drawn = self.deck.draw()
+                        msg = "The robot has drawn "+str(drawn)
+                        robotDrew = True
+                else:
+                    if not playerDrew:
+                        drawn = self.deck.draw()
+                        msg = "You drew "+str(drawn)
+                        playerDrew = True
+                        robotTurn = False
             font = pygame.font.SysFont('arial', width//20)
             text = font.render(msg, 1, (0,0,0))
             textX = (width//self.cardsLength//2) + width//10
@@ -62,9 +77,9 @@ class Game:
             bottomRightX = textX + text.get_rect()[2]
             bottomRightY = textY + text.get_rect()[3]
 
-            pygame.draw.rect(screen, Colors["LIGHT_GREY"], (textX, textY, bottomRightX, bottomRightY))
+            pygame.draw.rect(screen, Colors["LIGHT_GREY"], (textX, textY, width, bottomRightY))
             screen.blit(text, ((textX, textY)))
-            dirty.append((textX, textY, bottomRightX, bottomRightY))
+            dirty.append((textX, textY, width, bottomRightY))
 
             # Pump GTK messages.
             while Gtk.events_pending():
@@ -87,9 +102,10 @@ class Game:
                             if(waitingForClick):
                                 print("clicked on card "+str(i))
                                 self.playerHand.hand[i], drawn = drawn, self.playerHand.hand[i]
-                                drawn = self.deck.draw()
-                                msg = 'You drew ' + str(drawn)
-
+                                robotTurn = True
+                                robotDrew = False
+                                playerDrew = False
+                                timeStartedRobotTurn = pygame.time.get_ticks()
 
 
 
