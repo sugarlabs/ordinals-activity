@@ -7,6 +7,7 @@ from deck import Deck
 from hand import Hand
 from card import Card
 from colors import Colors
+import logging
 
 class Game:
 
@@ -14,9 +15,12 @@ class Game:
         # Set up a clock for managing the frame rate.
         self.clock = pygame.time.Clock()
         self.deck = Deck()
+        self.playerHand = Hand()
+
+        self.deck.deal([self.playerHand])
         
         # How many cards in our line
-        self.cardsLength = 5
+        self.cardsLength = 10
 
     # Called to save the state of the game to the Journal.
     def write_file(self, file_path):
@@ -34,19 +38,16 @@ class Game:
         width = screen.get_width()
         height = screen.get_height()
 
-        dirty = []
-        dirty.append(pygame.draw.rect(screen, Colors["LIGHT_GREY"],
-                                      pygame.Rect(0, 0, width, height)))
-        pygame.display.update(dirty)
+        screen.fill(Colors["LIGHT_GREY"])
+        pygame.display.update()
 
         while self.running:
             width, height = pygame.display.get_surface().get_size()
-            mousePos = pygame.mouse.get_pos()
-            
+
             dirty = []
-            buffer = height//10
-            for i in range(1, self.cardsLength+1, 1):
-                test = Card(Colors["DARK_GREY"], width//self.cardsLength//2, height//100 + height//self.cardsLength*(i-1), int((height//self.cardsLength) * 0.9), "1")
+            for i in range(self.cardsLength):
+                test = Card(Colors["DARK_GREY"], width//self.cardsLength//2, 
+                (height//100) + (height//self.cardsLength)*i, int((height//self.cardsLength) * 0.9), str(self.playerHand.hand[i]))
                 test.draw(screen)
                 dirty.append(test.getRect())
 
@@ -61,13 +62,10 @@ class Game:
                 if event.type == pygame.QUIT:
                     return
                 elif event.type == pygame.VIDEORESIZE:
-                    dirty.append(pygame.draw.rect(screen, Colors["LIGHT_GREY"],
-                                      pygame.Rect(0, 0, width, height)))
-                    pygame.display.set_mode(event.size, pygame.RESIZABLE)
-                    width = screen.get_width()
-                    height = screen.get_height()
+                    screen.fill(Colors["LIGHT_GREY"])
+                    pygame.display.update()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    pass  
+                    pass
 
             # Try to stay at 30 FPS
             self.clock.tick(30)
