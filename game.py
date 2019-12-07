@@ -41,6 +41,8 @@ class Game:
         screen.fill(Colors["LIGHT_GREY"])
         pygame.display.update()
 
+        picked = self.deck.draw()
+        msg ='You drew ' + str(picked)
         while self.running:
             width, height = pygame.display.get_surface().get_size()
             mousePos = pygame.mouse.get_pos()
@@ -51,6 +53,13 @@ class Game:
                 (height//100) + (height//self.cardsLength)*i, int((height//self.cardsLength) * 0.9), str(self.playerHand.hand[i]))
                 test.draw(screen)
                 dirty.append(test.getRect())
+
+            font = pygame.font.SysFont('arial', width//20)
+            text = font.render(msg, 1, (0,0,0))
+            bottomRightX = (width//self.cardsLength//2) + width//10 + text.get_rect()[2]
+            bottomRightY = height//10 + text.get_rect()[3]
+            screen.blit(text, ((width//self.cardsLength//2) + width//10, height//10))
+            dirty.append(((width//self.cardsLength//2), height//10 , bottomRightX, bottomRightY))
 
             # Pump GTK messages.
             while Gtk.events_pending():
@@ -75,6 +84,8 @@ class Game:
             # Try to stay at 30 FPS
             self.clock.tick(30)
             pygame.display.update(dirty)
+            
+
 
 
 # This function is called when the game is run directly from the command line:
