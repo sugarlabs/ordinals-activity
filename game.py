@@ -22,7 +22,6 @@ class Game:
         
         # How many cards in our line
         self.cardsLength = 10
-
     # Called to save the state of the game to the Journal.
     def write_file(self, file_path):
         pass
@@ -56,12 +55,22 @@ class Game:
             width, height = pygame.display.get_surface().get_size()
             mousePos = pygame.mouse.get_pos()
 
+            if self.deck.empty():
+                msg = "You have " + str(self.playerHand.countPoints()) + " points, robot has " + str(self.robotHand.countPoints()) 
+                waitingForClick = False
+                waitingForDiscardChoice = False
+                robotDrew = False
+                playerDrew = False
+                playerIsDrawingFromDeck = False
+                robotChoseDiscard = False
+
             dirty = []
             for i in range(self.cardsLength):
                 test = Card(Colors["DARK_GREY"], width//self.cardsLength//2, 
                 (height//100) + (height//self.cardsLength)*i, int((height//self.cardsLength) * 0.9), str(self.playerHand.hand[i]))
                 test.draw(screen)
                 dirty.append(test.getRect())
+
             if robotTurn:
                 if(pygame.time.get_ticks() - timeStartedRobotTurn < 1500):
                     msg = "It\'s the robot\'s turn."
@@ -72,6 +81,8 @@ class Game:
             
                         if(old_card == drawn):
                             msg = "The robot draws a card."
+                            drawn = self.deck.draw()
+                            drawn = self.robotHand.place(drawn)
                         else:
                             msg = "The robot picked up "+ str(drawn) + " from the pile."
                     robotChoseDiscard = True
@@ -79,7 +90,9 @@ class Game:
                     msg = "The robot discards "+str(drawn)
                 
                 else:
-                    if not playerDrew:
+                    if self.deck.empty():
+                        pass
+                    elif not playerDrew:
                         msg = "You drew "+str(drawn)+ " from discard pile. Use?"
                         playerDrew = True
                         robotTurn = False
@@ -162,6 +175,21 @@ class Game:
             # Try to stay at 30 FPS
             self.clock.tick(30)
             pygame.display.update(dirty)
+            pygame.event.clear()
+
+            ee = pygame.event.Event(24)
+            try_post = 1
+
+            # the pygame.event.post raises an exception if the event
+            #   queue is full.  so wait a little bit, and try again.
+            while try_post:
+                try:
+                    pygame.event.post(ee)
+                    try_post = 0
+                except:
+                    pygame.time.wait(1)
+                    try_post = 1
+
             
 
 

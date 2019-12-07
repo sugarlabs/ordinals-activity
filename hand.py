@@ -34,3 +34,13 @@ class Hand:
                 self.hand[i] = nn
                 return n
         return nn
+
+    def countPoints(self):
+        points = 0
+        for i in range(1, len(self.hand)):
+            if(self.hand[i] > self.hand[i-1]):
+                points += 5
+            else:
+                break
+        
+        return points
