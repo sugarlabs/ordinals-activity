@@ -16,8 +16,9 @@ class Game:
         self.clock = pygame.time.Clock()
         self.deck = Deck()
         self.playerHand = Hand()
+        self.robotHand = Hand()
 
-        self.deck.deal([self.playerHand])
+        self.deck.deal([self.playerHand, self.robotHand])
         
         # How many cards in our line
         self.cardsLength = 10
@@ -50,6 +51,7 @@ class Game:
         robotDrew = False
         playerDrew = False
         playerIsDrawingFromDeck = False
+        robotChoseDiscard = False
         while self.running:
             width, height = pygame.display.get_surface().get_size()
             mousePos = pygame.mouse.get_pos()
@@ -61,14 +63,23 @@ class Game:
                 test.draw(screen)
                 dirty.append(test.getRect())
             if robotTurn:
-                if(pygame.time.get_ticks() - timeStartedRobotTurn < 2000):
-                    if not robotDrew:
-                        drawn = self.deck.draw()
-                        msg = "The robot has drawn "+str(drawn)
-                        robotDrew = True
+                if(pygame.time.get_ticks() - timeStartedRobotTurn < 1500):
+                    msg = "It\'s the robot\'s turn."
+                elif (pygame.time.get_ticks() - timeStartedRobotTurn < 3000):
+                    print("running")
+                    if not robotChoseDiscard:
+                        old_card = self.robotHand.place(drawn)
+            
+                        if(old_card == drawn):
+                            msg = "The robot draws a card."
+                        else:
+                            msg = "The robot picked up "+ str(drawn) + " from the pile."
+                    robotChoseDiscard = True
+                elif (pygame.time.get_ticks() - timeStartedRobotTurn < 4500):
+                    msg = "The robot discards "+str(drawn)
+                
                 else:
                     if not playerDrew:
-                        drawn = self.deck.draw()
                         msg = "You drew "+str(drawn)+ " from discard pile. Use?"
                         playerDrew = True
                         robotTurn = False
@@ -118,6 +129,7 @@ class Game:
                                 print("clicked on card "+str(i))
                                 self.playerHand.hand[i], drawn = drawn, self.playerHand.hand[i]
                                 robotTurn = True
+                                robotChoseDiscard = False
                                 robotDrew = False
                                 playerDrew = False
                                 waitingForClick = False
