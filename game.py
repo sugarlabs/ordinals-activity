@@ -41,8 +41,9 @@ class Game:
         screen.fill(Colors["LIGHT_GREY"])
         pygame.display.update()
 
-        picked = self.deck.draw()
-        msg ='You drew ' + str(picked)
+        drawn = self.deck.draw()
+        msg = 'You drew ' + str(drawn)
+        waitingForClick = True
         while self.running:
             width, height = pygame.display.get_surface().get_size()
             mousePos = pygame.mouse.get_pos()
@@ -56,10 +57,14 @@ class Game:
 
             font = pygame.font.SysFont('arial', width//20)
             text = font.render(msg, 1, (0,0,0))
-            bottomRightX = (width//self.cardsLength//2) + width//10 + text.get_rect()[2]
-            bottomRightY = height//10 + text.get_rect()[3]
-            screen.blit(text, ((width//self.cardsLength//2) + width//10, height//10))
-            dirty.append(((width//self.cardsLength//2), height//10 , bottomRightX, bottomRightY))
+            textX = (width//self.cardsLength//2) + width//10
+            textY = height//10
+            bottomRightX = textX + text.get_rect()[2]
+            bottomRightY = textY + text.get_rect()[3]
+
+            pygame.draw.rect(screen, Colors["LIGHT_GREY"], (textX, textY, bottomRightX, bottomRightY))
+            screen.blit(text, ((textX, textY)))
+            dirty.append((textX, textY, bottomRightX, bottomRightY))
 
             # Pump GTK messages.
             while Gtk.events_pending():
@@ -79,7 +84,14 @@ class Game:
                         card = Card(Colors["DARK_GREY"], width//self.cardsLength//2, 
                 (height//100) + (height//self.cardsLength)*i, int((height//self.cardsLength) * 0.9), str(self.playerHand.hand[i]))
                         if(card.isOver(mousePos)):
-                            print("clicked on card "+str(i))
+                            if(waitingForClick):
+                                print("clicked on card "+str(i))
+                                self.playerHand.hand[i], drawn = drawn, self.playerHand.hand[i]
+                                drawn = self.deck.draw()
+                                msg = 'You drew ' + str(drawn)
+
+
+
 
             # Try to stay at 30 FPS
             self.clock.tick(30)
