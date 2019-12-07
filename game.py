@@ -49,6 +49,7 @@ class Game:
         waitingForDiscardChoice = False
         robotDrew = False
         playerDrew = False
+        playerIsDrawingFromDeck = False
         while self.running:
             width, height = pygame.display.get_surface().get_size()
             mousePos = pygame.mouse.get_pos()
@@ -68,12 +69,11 @@ class Game:
                 else:
                     if not playerDrew:
                         drawn = self.deck.draw()
-                        msg = "You drew "+str(drawn)+ " from the deck. Use?"
-                        waitingForClick = True
+                        msg = "You drew "+str(drawn)+ " from discard pile. Use?"
                         playerDrew = True
                         robotTurn = False
                         waitingForDiscardChoice = True
-                        
+                                    
             font = pygame.font.SysFont('arial', width//20)
             text = font.render(msg, 1, (0,0,0))
             textX = (width//self.cardsLength//2) + width//10
@@ -93,7 +93,6 @@ class Game:
                 noButton = Card(Colors["RED"], textX + abs(bottomRightX-textX)//4*2, bottomRightY + textY, width//5, "No")
                 noButton.draw(screen)
 
-            if waitingForDiscardChoice:
                 dirty.append(yesButton.getRect())
                 dirty.append(noButton.getRect())
 
@@ -127,9 +126,24 @@ class Game:
                     if(waitingForDiscardChoice):
                         print("mouse down while waiting for discard choice")
                         if(yesButton.isOver(mousePos)):
-                            print("clicked yes")
+                            waitingForDiscardChoice = False
+                            waitingForClick = True
+                            pygame.draw.rect(screen, Colors["LIGHT_GREY"], yesButton.getRect())
+                            pygame.draw.rect(screen, Colors["LIGHT_GREY"], noButton.getRect())
+                            msg = "Pick card to replace."
+
                         elif noButton.isOver(mousePos):
                             print("clicked no button")
+                            # playerIsDrawingFromDeck = True
+                            waitingForClick = True
+                            waitingForDiscardChoice = False
+
+                            drawn = self.deck.draw()
+                            msg = "You drew "+str(drawn)+" from the deck."
+                            pygame.draw.rect(screen, Colors["LIGHT_GREY"], yesButton.getRect())
+                            pygame.draw.rect(screen, Colors["LIGHT_GREY"], noButton.getRect())
+
+
 
 
 
