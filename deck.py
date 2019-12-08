@@ -1,4 +1,5 @@
-# Copyright (C) 2019, Sugar Labs
+# Copyright (C) 2019 Walter Bender
+# Copyright (C) 2019 Marcus Chong
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
