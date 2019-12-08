@@ -59,7 +59,7 @@ class Game:
             width, height = pygame.display.get_surface().get_size()
             mousePos = pygame.mouse.get_pos()
 
-            if self.deck.empty():
+            if len(self.deck.deck) <= 2: 
                 # msg = "You have " + str(self.playerHand.countPoints()) + " points, robot has " + str(self.robotHand.countPoints()) 
                 msg = _("You have %i points, robot has %i points") % (self.playerHand.countPoints(), self.robotHand.countPoints())
                 waitingForClick = False
@@ -85,14 +85,15 @@ class Game:
                     if not robotChoseDiscard:
                         old_card = self.robotHand.place(drawn)
             
-                        if(old_card == drawn):
+                        if old_card == drawn and not self.deck.empty():
                             # msg = "The robot draws a card."
                             msg = _("The robot draws a card.")
                             drawn = self.deck.draw()
                             drawn = self.robotHand.place(drawn)
                         else:
                             # msg = "The robot picked up "+ str(drawn) + " from the pile."
-                            msg = _("The robot picked up %i from the pile.") % drawn 
+                            msg = _("The robot picked up %i from the pile.") % drawn
+                            drawn = old_card
                     robotChoseDiscard = True
                 elif (pygame.time.get_ticks() - timeStartedRobotTurn < 4500):
                     # msg = "The robot discards "+str(drawn)
@@ -176,7 +177,7 @@ class Game:
 
                             drawn = self.deck.draw()
                             # msg = "You drew "+str(drawn)+" from the deck."
-                            msg = _("You drew %i from thd deck.") % drawn
+                            msg = _("You drew %i from the deck.") % drawn
                             pygame.draw.rect(screen, Colors["LIGHT_GREY"], yesButton.getRect())
                             pygame.draw.rect(screen, Colors["LIGHT_GREY"], noButton.getRect())
 

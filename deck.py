@@ -6,16 +6,16 @@ class Deck:
 
     def __init__(self):
         if len(self.deck) == 0:
-            for i in range(23):
+            for i in range(26):
                 self.deck.append(i + 1)
         else:
-            for i in range(23):
+            for i in range(26):
                 self.deck[i] = i + 1
         self.shuffle()
 
     def shuffle(self):
-        for i in range(23):
-            self.swap(i, randrange(23))
+        for i in range(26):
+            self.swap(i, randrange(26))
 
     def swap(self, i, j):
         k = self.deck[i]

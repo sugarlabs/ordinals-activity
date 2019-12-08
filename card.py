@@ -10,7 +10,10 @@ class Card():
         self.text = text
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, (self.x, self.y, self.sideLen, self.sideLen), 0)
-        font = pygame.font.SysFont('arial', int(self.sideLen*0.7))
+        fontSz = int(self.sideLen*0.7)
+        if(len(self.text) > 2):
+            fontSz = int(fontSz*0.75)
+        font = pygame.font.SysFont('arial', fontSz)
         text = font.render(self.text, 1, (0,0,0))
         screen.blit(text, (self.x + (self.sideLen/2 - text.get_width()/2), self.y + (self.sideLen/2 - text.get_height()/2)))
     def isOver(self, pos):
