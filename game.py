@@ -42,7 +42,8 @@ class Game:
         pygame.display.update()
 
         drawn = self.deck.draw()
-        msg = "You drew " + str(drawn) + " from the deck."
+        # msg = "You drew " + str(drawn) + " from the deck."
+        msg = _("You drew %i from the deck.") % drawn
         waitingForClick = True
         robotTurn = False
         timeStartedRobotTurn = None
@@ -56,7 +57,8 @@ class Game:
             mousePos = pygame.mouse.get_pos()
 
             if self.deck.empty():
-                msg = "You have " + str(self.playerHand.countPoints()) + " points, robot has " + str(self.robotHand.countPoints()) 
+                # msg = "You have " + str(self.playerHand.countPoints()) + " points, robot has " + str(self.robotHand.countPoints()) 
+                msg = _("You have %i points, robot has %i points") % (self.playerHand.countPoints(), self.robotHand.countPoints())
                 waitingForClick = False
                 waitingForDiscardChoice = False
                 robotDrew = False
@@ -73,27 +75,32 @@ class Game:
 
             if robotTurn:
                 if(pygame.time.get_ticks() - timeStartedRobotTurn < 1500):
-                    msg = "It\'s the robot\'s turn."
+                    # msg = "It\'s the robot\'s turn."
+                    msg = _("It\'s the robot\'s turn.")
                 elif (pygame.time.get_ticks() - timeStartedRobotTurn < 3000):
                     print("running")
                     if not robotChoseDiscard:
                         old_card = self.robotHand.place(drawn)
             
                         if(old_card == drawn):
-                            msg = "The robot draws a card."
+                            # msg = "The robot draws a card."
+                            msg = _("The robot draws a card.")
                             drawn = self.deck.draw()
                             drawn = self.robotHand.place(drawn)
                         else:
-                            msg = "The robot picked up "+ str(drawn) + " from the pile."
+                            # msg = "The robot picked up "+ str(drawn) + " from the pile."
+                            msg = _("The robot picked up %i from the pile.") % drawn 
                     robotChoseDiscard = True
                 elif (pygame.time.get_ticks() - timeStartedRobotTurn < 4500):
-                    msg = "The robot discards "+str(drawn)
+                    # msg = "The robot discards "+str(drawn)
+                    msg = "The robot discards %i" % drawn
                 
                 else:
                     if self.deck.empty():
                         pass
                     elif not playerDrew:
-                        msg = "You drew "+str(drawn)+ " from discard pile. Use?"
+                        # msg = "You drew "+str(drawn)+ " from discard pile. Use?"
+                        msg = "You drew %i from discard pile. Use?" % drawn
                         playerDrew = True
                         robotTurn = False
                         waitingForDiscardChoice = True
@@ -155,7 +162,8 @@ class Game:
                             waitingForClick = True
                             pygame.draw.rect(screen, Colors["LIGHT_GREY"], yesButton.getRect())
                             pygame.draw.rect(screen, Colors["LIGHT_GREY"], noButton.getRect())
-                            msg = "Pick card to replace."
+                            # msg = "Pick card to replace."
+                            msg = _("Pick card to replace.")
 
                         elif noButton.isOver(mousePos):
                             print("clicked no button")
@@ -164,7 +172,8 @@ class Game:
                             waitingForDiscardChoice = False
 
                             drawn = self.deck.draw()
-                            msg = "You drew "+str(drawn)+" from the deck."
+                            # msg = "You drew "+str(drawn)+" from the deck."
+                            msg = _("You drew %i from thd deck.") % drawn
                             pygame.draw.rect(screen, Colors["LIGHT_GREY"], yesButton.getRect())
                             pygame.draw.rect(screen, Colors["LIGHT_GREY"], noButton.getRect())
 

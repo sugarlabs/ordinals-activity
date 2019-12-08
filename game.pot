@@ -1,0 +1,45 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2019-12-07 22:20+EST\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: game.py:46
+msgid "You drew %i from the deck."
+msgstr ""
+
+#: game.py:61
+msgid "You have %i points, robot has %i points"
+msgstr ""
+
+#: game.py:79
+msgid "It's the robot's turn."
+msgstr ""
+
+#: game.py:87
+msgid "The robot draws a card."
+msgstr ""
+
+#: game.py:92
+msgid "The robot picked up %i from the pile."
+msgstr ""
+
+#: game.py:166
+msgid "Pick card to replace."
+msgstr ""
+
+#: game.py:176
+msgid "You drew %i from thd deck."
+msgstr ""
+
