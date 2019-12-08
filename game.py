@@ -9,6 +9,9 @@ from card import Card
 from colors import Colors
 import logging
 
+# Filler until translations come in
+_ = lambda s: s
+
 class Game:
 
     def __init__(self):
@@ -119,9 +122,9 @@ class Game:
             yesButton = None
             noButton = None
             if waitingForDiscardChoice:
-                yesButton = Card(Colors["GREEN"], textX, bottomRightY + textY, width//5, "Yes")
+                yesButton = Card(Colors["GREEN"], textX, bottomRightY + textY, width//8, "Yes")
                 yesButton.draw(screen)
-                noButton = Card(Colors["RED"], textX + abs(bottomRightX-textX)//4*2, bottomRightY + textY, width//5, "No")
+                noButton = Card(Colors["RED"], textX + abs(bottomRightX-textX)//4*2, bottomRightY + textY, width//8, "No")
                 noButton.draw(screen)
 
                 dirty.append(yesButton.getRect())
