@@ -15,21 +15,21 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #!/usr/bin/python3
-import pygame
-import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from deck import Deck
 from hand import Hand
 from card import Card
 from colors import Colors
-import logging
+import pygame
+import gi
+gi.require_version('Gtk', '3.0')
+
 
 # Filler until translations come in
 _ = lambda s: s
 
-class Game:
 
+class Game:
     def __init__(self):
         # Set up a clock for managing the frame rate.
         self.clock = pygame.time.Clock()
@@ -38,9 +38,10 @@ class Game:
         self.robotHand = Hand()
 
         self.deck.deal([self.playerHand, self.robotHand])
-        
+
         # How many cards in our line
         self.cardsLength = 10
+
     # Called to save the state of the game to the Journal.
     def write_file(self, file_path):
         pass
@@ -67,66 +68,56 @@ class Game:
         robotTurn = False
         timeStartedRobotTurn = None
         waitingForDiscardChoice = False
-        robotDrew = False
         playerDrew = False
-        playerIsDrawingFromDeck = False
         robotChoseDiscard = False
         while self.running:
             width, height = pygame.display.get_surface().get_size()
             mousePos = pygame.mouse.get_pos()
 
-            if len(self.deck.deck) <= 2: 
-                # msg = "You have " + str(self.playerHand.countPoints()) + " points, robot has " + str(self.robotHand.countPoints()) 
+            if len(self.deck.deck) <= 2:
                 msg = _("You have %i points, robot has %i points") % (self.playerHand.countPoints(), self.robotHand.countPoints())
                 waitingForClick = False
                 waitingForDiscardChoice = False
-                robotDrew = False
                 playerDrew = False
-                playerIsDrawingFromDeck = False
                 robotChoseDiscard = False
 
             dirty = []
             for i in range(self.cardsLength):
-                test = Card(Colors["DARK_GREY"], width//self.cardsLength//2, 
-                (height//100) + (height//self.cardsLength)*i, int((height//self.cardsLength) * 0.9), str(self.playerHand.hand[i]))
+                test = Card(Colors["DARK_GREY"], width//self.cardsLength//2,
+                            (height//100) + (height//self.cardsLength)*i, int((height//self.cardsLength) * 0.9), str(self.playerHand.hand[i]))
                 test.draw(screen)
                 dirty.append(test.getRect())
 
             if robotTurn:
                 if(pygame.time.get_ticks() - timeStartedRobotTurn < 1500):
-                    # msg = "It\'s the robot\'s turn."
                     msg = _("It\'s the robot\'s turn.")
                 elif (pygame.time.get_ticks() - timeStartedRobotTurn < 3000):
                     print("running")
                     if not robotChoseDiscard:
                         old_card = self.robotHand.place(drawn)
-            
+
                         if old_card == drawn and not self.deck.empty():
-                            # msg = "The robot draws a card."
                             msg = _("The robot draws a card.")
                             drawn = self.deck.draw()
                             drawn = self.robotHand.place(drawn)
                         else:
-                            # msg = "The robot picked up "+ str(drawn) + " from the pile."
                             msg = _("The robot picked up %i from the pile.") % drawn
                             drawn = old_card
                     robotChoseDiscard = True
                 elif (pygame.time.get_ticks() - timeStartedRobotTurn < 4500):
-                    # msg = "The robot discards "+str(drawn)
                     msg = "The robot discards %i" % drawn
-                
+
                 else:
                     if self.deck.empty():
                         pass
                     elif not playerDrew:
-                        # msg = "You drew "+str(drawn)+ " from discard pile. Use?"
                         msg = "You drew %i from discard pile. Use?" % drawn
                         playerDrew = True
                         robotTurn = False
                         waitingForDiscardChoice = True
-                                    
+
             font = pygame.font.SysFont('arial', width//20)
-            text = font.render(msg, 1, (0,0,0))
+            text = font.render(msg, 1, (0, 0, 0))
             textX = (width//self.cardsLength//2) + width//10
             textY = height//10
             bottomRightX = textX + text.get_rect()[2]
@@ -162,19 +153,20 @@ class Game:
                     pygame.display.update()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     for i in range(self.cardsLength):
-                        card = Card(Colors["DARK_GREY"], width//self.cardsLength//2, 
-                (height//100) + (height//self.cardsLength)*i, int((height//self.cardsLength) * 0.9), str(self.playerHand.hand[i]))
+                        card = Card(Colors["DARK_GREY"],
+                                    width//self.cardsLength//2,
+                                    (height//100) + (height//self.cardsLength)*i,
+                                    int((height//self.cardsLength) * 0.9), str(self.playerHand.hand[i]))
                         if(card.isOver(mousePos)):
                             if(waitingForClick):
                                 print("clicked on card "+str(i))
                                 self.playerHand.hand[i], drawn = drawn, self.playerHand.hand[i]
                                 robotTurn = True
                                 robotChoseDiscard = False
-                                robotDrew = False
                                 playerDrew = False
                                 waitingForClick = False
                                 timeStartedRobotTurn = pygame.time.get_ticks()
-                    
+
                     if(waitingForDiscardChoice):
                         print("mouse down while waiting for discard choice")
                         if(yesButton.isOver(mousePos)):
@@ -182,24 +174,17 @@ class Game:
                             waitingForClick = True
                             pygame.draw.rect(screen, Colors["LIGHT_GREY"], yesButton.getRect())
                             pygame.draw.rect(screen, Colors["LIGHT_GREY"], noButton.getRect())
-                            # msg = "Pick card to replace."
                             msg = _("Pick card to replace.")
 
                         elif noButton.isOver(mousePos):
                             print("clicked no button")
-                            # playerIsDrawingFromDeck = True
                             waitingForClick = True
                             waitingForDiscardChoice = False
 
                             drawn = self.deck.draw()
-                            # msg = "You drew "+str(drawn)+" from the deck."
                             msg = _("You drew %i from the deck.") % drawn
                             pygame.draw.rect(screen, Colors["LIGHT_GREY"], yesButton.getRect())
                             pygame.draw.rect(screen, Colors["LIGHT_GREY"], noButton.getRect())
-
-
-
-
 
             # Try to stay at 30 FPS
             self.clock.tick(30)
@@ -219,12 +204,8 @@ class Game:
                     pygame.time.wait(1)
                     try_post = 1
 
-            
-
-
 
 # This function is called when the game is run directly from the command line:
-# ./Game.py
 def main():
     pygame.init()
     pygame.display.set_mode((0, 0), pygame.RESIZABLE)

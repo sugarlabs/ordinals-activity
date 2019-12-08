@@ -14,20 +14,15 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from gettext import gettext as _
-
-import sys
-import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
-import pygame
-
 from sugar3.activity.activity import Activity
 from sugar3.graphics.toolbarbox import ToolbarBox
 from sugar3.activity.widgets import ActivityToolbarButton
-from sugar3.graphics.toolbutton import ToolButton
 from sugar3.activity.widgets import StopButton
-
+from gi.repository import Gtk
+import pygame
+import sys
+import gi
+gi.require_version('Gtk', '3.0')
 
 sys.path.append('..')  # Import sugargame package from top directory.
 import sugargame.canvas
@@ -65,7 +60,6 @@ class OrdinalsActivity(Activity):
         activity_button = ActivityToolbarButton(self)
         toolbar_box.toolbar.insert(activity_button, -1)
         activity_button.show()
-
 
         # Blank space (separator) and Stop button at the end:
 

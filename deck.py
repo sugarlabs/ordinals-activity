@@ -16,6 +16,7 @@
 
 from random import randrange
 
+
 class Deck:
     deck = []
 
