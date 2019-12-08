@@ -1,0 +1,11 @@
+<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd' [
+	<!ENTITY stroke_color "#010101">
+	<!ENTITY fill_color "#FFFFFF">
+]><svg height="55" width="55" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+ <g>
+  <title>Layer 1</title>
+  <rect fill="&fill_color;" height="38.104428" id="svg_7" stroke="&stroke_color;" stroke-width="3.5" width="21.276584" x="11.349142" y="10.178926"/>
+  <rect fill="&fill_color;" height="39.071546" id="svg_10" stroke="&stroke_color;" stroke-width="3.5" width="22.437125" x="17.538694" y="4.569644"/>
+ </g>
+</svg>
