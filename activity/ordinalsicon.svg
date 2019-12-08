@@ -5,7 +5,17 @@
  <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
  <g>
   <title>Layer 1</title>
-  <rect fill="&fill_color;" height="38.104428" id="svg_7" stroke="&stroke_color;" stroke-width="3.5" width="21.276584" x="11.349142" y="10.178926"/>
-  <rect fill="&fill_color;" height="39.071546" id="svg_10" stroke="&stroke_color;" stroke-width="3.5" width="22.437125" x="17.538694" y="4.569644"/>
+  <path d="m9.933809,18.788187" fill="&fill_color;" fill-opacity="null" id="svg_8" opacity="0.5" stroke="&stroke_color;" stroke-opacity="null" stroke-width="1.5"/>
+  <path d="m13.090631,16.344194" fill="&fill_color;" fill-opacity="null" id="svg_9" opacity="0.5" stroke="&stroke_color;" stroke-opacity="null" stroke-width="1.5"/>
+  <path d="m12.988799,20.417515" fill="&fill_color;" fill-opacity="null" id="svg_10" opacity="0.5" stroke="&stroke_color;" stroke-opacity="null" stroke-width="1.5"/>
+  <path d="m22.2556,23.879835" fill="&fill_color;" fill-opacity="null" id="svg_11" opacity="0.5" stroke="&stroke_color;" stroke-opacity="null" stroke-width="1.5"/>
+  <path d="m3.314665,23.37067" fill="&fill_color;" fill-opacity="null" id="svg_12" opacity="0.5" stroke="&stroke_color;" stroke-opacity="null" stroke-width="1.5"/>
+  <rect fill="&fill_color;" fill-opacity="null" height="4.032105" id="svg_15" stroke="&stroke_color;" stroke-opacity="null" stroke-width="1.5" width="25.280414" x="4.701912" y="10.739541"/>
+  <rect fill="&fill_color;" fill-opacity="null" height="3.780215" id="svg_21" stroke="&stroke_color;" stroke-opacity="null" stroke-width="1.5" width="30.112166" x="4.701912" y="17.947698"/>
+  <rect fill="&fill_color;" fill-opacity="null" height="4.004096" id="svg_23" stroke="&stroke_color;" stroke-opacity="null" stroke-width="1.5" width="36.928387" x="4.701912" y="24.875954"/>
+  <rect fill="&fill_color;" fill-opacity="null" height="4.37723" id="svg_25" stroke="&stroke_color;" stroke-opacity="null" stroke-width="1.5" width="41.760138" x="4.804548" y="32.074711"/>
+  <line fill="&fill_color;" fill-opacity="null" id="svg_26" stroke="&stroke_color;" stroke-linecap="null" stroke-linejoin="null" stroke-opacity="null" stroke-width="1.5" x1="45.403366" x2="45.403366" y1="9.764884" y2="20.377481"/>
+  <line fill="&fill_color;" fill-opacity="null" id="svg_42" stroke="&stroke_color;" stroke-linecap="null" stroke-linejoin="null" stroke-opacity="null" stroke-width="1.5" x1="41.31407" x2="46.042789" y1="15.679436" y2="20.706811"/>
+  <line fill="&fill_color;" fill-opacity="null" id="svg_44" stroke="&stroke_color;" stroke-linecap="null" stroke-linejoin="null" stroke-opacity="null" stroke-width="1.5" x1="49.775988" x2="45.047269" y1="15.679436" y2="20.657035"/>
  </g>
 </svg>
