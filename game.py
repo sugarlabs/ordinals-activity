@@ -122,9 +122,9 @@ class Game:
             yesButton = None
             noButton = None
             if waitingForDiscardChoice:
-                yesButton = Card(Colors["GREEN"], textX, bottomRightY + textY, width//8, "Yes")
+                yesButton = Card(Colors["GREEN"], textX, bottomRightY + textY, width//8, _("Yes"))
                 yesButton.draw(screen)
-                noButton = Card(Colors["RED"], textX + abs(bottomRightX-textX)//4*2, bottomRightY + textY, width//8, "No")
+                noButton = Card(Colors["RED"], textX + abs(bottomRightX-textX)//4*2, bottomRightY + textY, width//8, _("No"))
                 noButton.draw(screen)
 
                 dirty.append(yesButton.getRect())
