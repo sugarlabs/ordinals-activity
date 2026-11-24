@@ -63,12 +63,12 @@ class Game:
         pygame.display.update()
 
         drawn = self.deck.draw()
-        # msg = "You drew " + str(drawn) + " from the deck."
-        msg = _("You drew %i from the deck.") % drawn
-        waitingForClick = True
+        msg = _("You drew %i from the deck. Use?") % drawn
+        waitingForClick = False
         robotTurn = False
         timeStartedRobotTurn = None
         waitingForDiscardChoice = False
+        waitingForDrawChoice = True
         playerDrew = False
         robotChoseDiscard = False
         while self.running:
@@ -79,6 +79,7 @@ class Game:
                 msg = _("You have %i points, robot has %i points") % (self.playerHand.countPoints(), self.robotHand.countPoints())
                 waitingForClick = False
                 waitingForDiscardChoice = False
+                waitingForDrawChoice = False
                 playerDrew = False
                 robotChoseDiscard = False
 
@@ -112,7 +113,7 @@ class Game:
                     if self.deck.empty():
                         pass
                     elif not playerDrew:
-                        msg = "You drew %i from discard pile. Use?" % drawn
+                        msg = _("You drew %i from discard pile. Use?") % drawn
                         playerDrew = True
                         robotTurn = False
                         waitingForDiscardChoice = True
@@ -130,7 +131,7 @@ class Game:
 
             yesButton = None
             noButton = None
-            if waitingForDiscardChoice:
+            if waitingForDiscardChoice or waitingForDrawChoice:
                 yesButton = Card(Colors["GREEN"], textX, bottomRightY + textY, width//8, _("Yes"))
                 yesButton.draw(screen)
                 noButton = Card(Colors["RED"], textX + abs(bottomRightX-textX)//4*2, bottomRightY + textY, width//8, _("No"))
@@ -179,13 +180,33 @@ class Game:
 
                         elif noButton.isOver(mousePos):
                             print("clicked no button")
-                            waitingForClick = True
                             waitingForDiscardChoice = False
+                            waitingForDrawChoice = True
 
                             drawn = self.deck.draw()
-                            msg = _("You drew %i from the deck.") % drawn
+                            msg = _("You drew %i from the deck. Use?") % drawn
                             pygame.draw.rect(screen, Colors["LIGHT_GREY"], yesButton.getRect())
                             pygame.draw.rect(screen, Colors["LIGHT_GREY"], noButton.getRect())
+
+                    elif(waitingForDrawChoice):
+                        print("mouse down while waiting for draw choice")
+                        if(yesButton.isOver(mousePos)):
+                            waitingForDrawChoice = False
+                            waitingForClick = True
+                            pygame.draw.rect(screen, Colors["LIGHT_GREY"], yesButton.getRect())
+                            pygame.draw.rect(screen, Colors["LIGHT_GREY"], noButton.getRect())
+                            msg = _("Pick card to replace.")
+
+                        elif noButton.isOver(mousePos):
+                            print("clicked no button for draw pile")
+                            waitingForDrawChoice = False
+                            pygame.draw.rect(screen, Colors["LIGHT_GREY"], yesButton.getRect())
+                            pygame.draw.rect(screen, Colors["LIGHT_GREY"], noButton.getRect())
+                            robotTurn = True
+                            robotChoseDiscard = False
+                            playerDrew = False
+                            timeStartedRobotTurn = pygame.time.get_ticks()
+                            
 
             # Try to stay at 30 FPS
             self.clock.tick(30)
@@ -216,3 +237,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
